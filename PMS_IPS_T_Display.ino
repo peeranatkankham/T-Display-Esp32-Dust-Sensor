@@ -61,6 +61,9 @@ static unsigned long screenOnTime = 0;
 
 bool notLessThan10 = false;
 bool notLessThan100 = false;
+bool pm1_100 = false;
+bool pm25_100 = false;
+bool pm10_100 = false;
 
 unsigned long lastButtonPressTime = 0;
 const unsigned long debounceInterval = 200;  // Adjust debounce interval as needed (in milliseconds)
@@ -232,8 +235,13 @@ void updateDisplay(const String& sensorData) {
     tft.fillRect(80, 50, 50, 50, TFT_BLACK);
   }
   if (data.PM_AE_UG_2_5 > 99) {
+    pm25_100 = true;
     tft.setCursor(30, 50);
   } else {
+    if (pm25_100 == true){
+      tft.fillRect(0, 50, 150, 50, TFT_BLACK);
+      pm25_100 = false;
+    }
     tft.setCursor(50, 50);
   }
   tft.println(data.PM_AE_UG_2_5);
@@ -241,8 +249,13 @@ void updateDisplay(const String& sensorData) {
 
   tft.setTextSize(3);
   if (data.PM_AE_UG_1_0 > 99) {
+    pm1_100 = true;
     tft.setCursor(172, 35);
   } else {
+    if (pm1_100 == true){
+      tft.fillRect(170, 35, 55, 25, RED);
+      pm1_100 = false;
+    }
     tft.setCursor(185, 35);
   }
   if (data.PM_AE_UG_1_0 < 10 && data.PM_AE_UG_10_0 < 10) {
@@ -253,8 +266,13 @@ void updateDisplay(const String& sensorData) {
   tft.println(data.PM_AE_UG_1_0);
 
   if (data.PM_AE_UG_10_0 > 99) {
+    pm10_100 = true;
     tft.setCursor(172, 100);
   } else {
+    if (pm10_100 == true){
+      tft.fillRect(170, 100, 60, 30, RED);
+      pm10_100 = false;
+    }
     tft.setCursor(185, 100);
   }
   if (data.PM_AE_UG_10_0 < 10) {
